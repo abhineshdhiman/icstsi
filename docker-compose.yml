@@ -1,0 +1,15 @@
+# Run the Flutter web app end-to-end with `docker compose up`.
+# Reads env vars from .env (gitignored) — copy .env.example first.
+# Watch-and-rebuild: changes under lib/ and pubspec.yaml trigger a fresh
+# `flutter build web --release`. Refresh the browser to see updates.
+services:
+  web:
+    image: ghcr.io/cirruslabs/flutter:stable
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    command: sh .flutter-watch.sh

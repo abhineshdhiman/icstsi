@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/vessels_screen.dart';
+import 'screens/ports_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,6 +75,31 @@ class Home extends StatelessWidget {
               },
               icon: const Icon(Icons.directions_boat),
               label: const Text('View Vessels'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF6319),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PortsScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.anchor),
+              label: const Text('Port Selection'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFF6319),
                 foregroundColor: Colors.white,

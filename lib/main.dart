@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'screens/anonymous_home_screen.dart';
 import 'screens/vessels_screen.dart';
-import 'screens/ports_screen.dart';
+import 'screens/bookings_screen.dart';
+import 'screens/voyages_screen.dart';
+import 'screens/containers_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,105 +19,89 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ICSTSI',
-      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.indigo),
-      home: const Home(),
+      title: 'ICTSI',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: const Color(0xFFFF6319),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFFF6319),
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFFF6319),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+      ),
+      home: const MainShell(),
     );
   }
 }
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class MainShell extends StatefulWidget {
+  const MainShell({super.key});
+
+  @override
+  State<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends State<MainShell> {
+  int _currentIndex = 0;
+
+  final _tabs = const [
+    AnonymousHomeScreen(),
+    VesselsScreen(),
+    VoyagesScreen(),
+    BookingsScreen(),
+    ContainersScreen(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ICSTSI'),
-        backgroundColor: const Color(0xFFFF6319),
-        foregroundColor: Colors.white,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.directions_boat,
-              size: 80,
-              color: Color(0xFFFF6319),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'ICSTSI',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1919),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'International Container Shipping & Terminal Services',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF1A1919),
-              ),
-            ),
-            const SizedBox(height: 48),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const VesselsScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.directions_boat),
-              label: const Text('View Vessels'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6319),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 16,
-                ),
-                textStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PortsScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.anchor),
-              label: const Text('Port Selection'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6319),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 16,
-                ),
-                textStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
+      body: IndexedStack(index: _currentIndex, children: _tabs),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (i) => setState(() => _currentIndex = i),
+        backgroundColor: Colors.white,
+        indicatorColor: const Color(0xFFFF6319).withOpacity(0.15),
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home, color: Color(0xFFFF6319)),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.directions_boat_outlined),
+            selectedIcon:
+                Icon(Icons.directions_boat, color: Color(0xFFFF6319)),
+            label: 'Vessels',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.sailing_outlined),
+            selectedIcon: Icon(Icons.sailing, color: Color(0xFFFF6319)),
+            label: 'Voyages',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.book_online_outlined),
+            selectedIcon: Icon(Icons.book_online, color: Color(0xFFFF6319)),
+            label: 'Bookings',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.inventory_2_outlined),
+            selectedIcon: Icon(Icons.inventory_2, color: Color(0xFFFF6319)),
+            label: 'Containers',
+          ),
+        ],
       ),
     );
   }
